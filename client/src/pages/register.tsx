@@ -1,18 +1,40 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
+import axios from "axios";
 import InputGroup from "../components/InputGroup";
+import { useRouter } from "next/router";
 
 const Register = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<any>({});
+
+    const router = useRouter();
+
+    const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault(); // 이벤트가 일어났을 때 페이지가 새로고침 되는 것을 방지
+
+        try {
+            const res = await axios.post('/auth/register', {
+                email: email, // 자바스크립트는 이와 같이 타입이 같으면 타입을 생략할 수 있음. 아래의 password와 이 줄은 같은 기능을 수행
+                password,
+                username
+            });
+    
+            console.log("res", res);
+            router.push("/login");
+        } catch(error: any) {
+            console.log("error", error);
+            setErrors(error.response.data || {});
+        }
+    }
     return (
         <div className="bg-white">
             <div className="flex flex-col items-center justify-content h-screen p-6">
                 <div className='w-10/12 mx-auto md:w-96'>
                     <h1 className="mb-2 text-lg font-medium">회원가입</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <InputGroup
                             placeholder="Email"
                             value={email}
