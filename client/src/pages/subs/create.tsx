@@ -2,6 +2,7 @@ import React, {FormEvent, useState} from "react";
 import InputGroup from "../../components/InputGroup"
 import axios from "axios";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 
 const SubCreate = () => {
     const [name, setName] = useState("");
@@ -81,3 +82,17 @@ const SubCreate = () => {
 }
 
 export default SubCreate;
+
+export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+    try {
+        const cookie = req.headers.cookie;
+        if (!cookie) throw new Error("Missing auth token cookie");
+        await axios.get("/auth/me", {headers: {cookie}})
+        
+        return {props: {}}
+    } catch (error) {
+        // 백엔드에서 요청에서 넘겨준 쿠키를 이용해 인증 처리할 때 에러가 나면 /login 페이지로 이동
+        res.writeHead(307, {location: "/login"}).end();
+        return {props: {}};
+    }
+}

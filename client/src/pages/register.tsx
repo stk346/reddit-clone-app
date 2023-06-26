@@ -3,14 +3,18 @@ import React, { FormEvent, useState } from "react";
 import axios from "axios";
 import InputGroup from "../components/InputGroup";
 import { useRouter } from "next/router";
+import { useAuthState } from "../context/auth";
 
 const Register = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<any>({});
+    const {authenticated} = useAuthState();
 
     let router = useRouter();
+    if (authenticated) router.push("/");
+
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // 이벤트가 일어났을 때 페이지가 새로고침 되는 것을 방지

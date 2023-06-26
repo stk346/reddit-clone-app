@@ -1,9 +1,11 @@
-import e, { Request, Response, Router } from "express";
+import e, { NextFunction, Request, Response, Router } from "express";
 import User from "../entities/User";
 import { isEmpty, validate } from "class-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
+import userMiddleware from "../middlewares/user";
+import authMiddleware from "../middlewares/auth";
 
 const mapError = (errors: Object[]) => {
     return errors.reduce((prev: any, err: any) => {
@@ -11,6 +13,11 @@ const mapError = (errors: Object[]) => {
 
         return prev;
     }, {});
+}
+
+// Request 객체를 쓰지 않을 때 _로 두면 declared but not ~~ 문구가 뜨지 않는다.
+const me = async (_: Request, res: Response) => {
+    return res.json(res.locals.user);
 }
 
 const register = async (req: Request, res: Response) => {
@@ -86,6 +93,7 @@ const login = async (req: Request, res: Response) => {
 }
 
 const router = Router();
+router.get("/me", userMiddleware, authMiddleware, me);
 router.post("/register", register);
 router.post("/login", login);
 
