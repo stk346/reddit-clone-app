@@ -3,6 +3,7 @@ import InputGroup from "../components/InputGroup";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useAuthDispatch } from "../context/auth";
 
 const Login = () => {
     let router = useRouter();
@@ -10,10 +11,15 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<any>({});
 
+    const dispatch = useAuthDispatch();
+
     const handleSubmit = async(event: FormEvent) => {
         event.preventDefault();
+        console.log("### handleSubmit function is called ###");
         try {
-            await axios.post("/auth/login", {password, username}, {withCredentials: true})
+            const res = await axios.post("/auth/login", {password, username}, {withCredentials: true});
+            dispatch("LOGIN", res.data?.user); // 유저 정보를 reactContext에 저장
+            router.push("/")
         } catch (error: any) {
             console.log(error);
             setErrors(error.response.data || {});
