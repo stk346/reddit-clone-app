@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { AuthProvider } from '../context/auth';
 import { useRouter } from 'next/router';
+import NavBar from '../components/NavBar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   Axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL + "/api";
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const authRoute = authRoutes.includes(pathname);
 
   return <AuthProvider>
+    {!authRoute && <NavBar />}
     <Component {...pageProps} />
     </AuthProvider>
 }
