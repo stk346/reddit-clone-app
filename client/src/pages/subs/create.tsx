@@ -24,7 +24,7 @@ const SubCreate = () => {
     }
 
     return (
-        <div className="flex flex-col justify-center pt-16">
+        <div className="flex flex-col justify-center pt-16 bg-white">
             <div className="w-10/12 mx-auto md:w-96">
                 <h1 className="mb-2 text-lg font-medium">
                         커뮤니티 만들기
@@ -56,7 +56,7 @@ const SubCreate = () => {
                         />
                     </div>
                     <div className="my-6">
-                        <p className="font-medium">Discription</p>
+                        <p className="font-medium">Description</p>
                         <p className="mb-2 text-xs text-gray-400">
                             해당 커뮤니티에 대한 설명입니다.
                         </p>
@@ -79,3 +79,5 @@ const SubCreate = () => {
         </div>
     )
 }
+
+export default SubCreate;

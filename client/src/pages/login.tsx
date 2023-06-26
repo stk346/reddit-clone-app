@@ -15,7 +15,6 @@ const Login = () => {
 
     const handleSubmit = async(event: FormEvent) => {
         event.preventDefault();
-        console.log("### handleSubmit function is called ###");
         try {
             const res = await axios.post("/auth/login", {password, username}, {withCredentials: true});
             dispatch("LOGIN", res.data?.user); // 유저 정보를 reactContext에 저장
