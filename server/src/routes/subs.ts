@@ -7,6 +7,18 @@ import Sub from "../entities/Sub";
 import User from "../entities/User";
 import Post from "../entities/Post";
 
+const getSub = async (req: Request, res: Response) => {
+    const name = req.params.name;
+
+    try {
+        const sub = await Sub.findOneByOrFail({name});
+        console.log("### findSub = ", sub, "###");
+        return res.json(sub);
+    } catch (error) {
+        return res.status(404).json({error: "서브를 찾을 수 없음."});
+    }
+}
+
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
     const {name, title, description} = req.body;
 
@@ -69,6 +81,7 @@ const topSubs = async (req: Request, res: Response) => {
 
 const router = Router();
 
+router.get("/:name", userMiddleware, getSub);
 router.post("/", userMiddleware, authMiddleware, createSub);
 router.get("/sub/topSubs", topSubs)
 
