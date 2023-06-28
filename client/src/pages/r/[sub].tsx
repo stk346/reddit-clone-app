@@ -9,20 +9,11 @@ import SideBar from "../../components/SideBar";
 const SubPage = () => {
     const [ownSub, setOwnSub] = useState((false));
     const {authenticated, user} = useAuthState();
-
-    const fetcher = async (url: string) => {
-        try {
-            const res = await axios.get(url);
-            return res.data;
-        } catch (error: any) {
-            throw error.respnse.data;
-        }
-    }
     
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
     const subName = router.query.sub; // [sub].tsx 파일의 sub이 query.sub 부분으로 들어옴
-    const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null, fetcher);
+    const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null);
     useEffect(() => {
         if(!sub || !user) return;
         setOwnSub(authenticated && user.username === sub.username)

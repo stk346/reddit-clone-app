@@ -3,6 +3,7 @@ import morgan from "morgan";
 import { AppDataSource } from "./data-source";
 import authRoutes from "./routes/auth";
 import subRoutes from "./routes/subs";
+import postRoutes from "./routes/posts";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -23,6 +24,7 @@ dotenv.config();
 app.get("/", (_, res) => res.send("running"));
 app.use("/api/auth", authRoutes)
 app.use("/api/subs", subRoutes)
+app.use("/api/posts", postRoutes)
 
 // 스태틱 파일들이 public 폴더 안에 있음을 알려주는 코드. 추가 안하면 액박뜸
 app.use(express.static("public"));
