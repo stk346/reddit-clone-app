@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["www.gravatar.com"]
+    domains: ["www.gravatar.com", "localhost"] // 리소스를 허용할 domain 주소들
   }
 }
 
