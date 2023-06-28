@@ -6,7 +6,7 @@ export interface User {
 }
 
 export interface Sub {
-    createdAd: string;
+    createdAt: string;
     updatedAt: string;
     name: string;
     title: string;
