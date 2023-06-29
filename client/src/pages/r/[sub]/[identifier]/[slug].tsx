@@ -14,13 +14,13 @@ const PostPage = () => {
     const {authenticated, user} = useAuthState(); 
     const [newComment, setNewComment] = useState("");
     const {data: post, error} = useSWR<Post>(identifier && slug ? `/posts/${identifier}/${slug}` : null);
-    const {data: comments} = useSWR<Comment[]>(
+    const {data: comments, mutate} = useSWR<Comment[]>(
         identifier && slug ? `/posts/${identifier}/${slug}/comments`: null
     )
 
-    console.log("comments", comments);
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        console.log("### newComment = ", newComment, "###");
         if(newComment.trim() === "") {
             return;
         }
@@ -28,6 +28,7 @@ const PostPage = () => {
             await axios.post(`/posts/${post?.identifier}/${post?.slug}/comments`, {
                 body: newComment
             });
+            mutate();
             setNewComment("");
         } catch (error) {
             console.log(error);
@@ -83,7 +84,7 @@ const PostPage = () => {
                                             </textarea>
                                             <div className="flex justify-end">
                                                 <button className="px-3 py-1 text-white bg-gray-400 rounded"
-                                                disabled={newComment.trim() === ""}> // 댓글에 아무것도 적지 않았을 때는 disable
+                                                disabled={newComment.trim() === ""}>  {/* 댓글에 아무것도 적지 않았을 때는 disable */}
                                                 댓글 작성
                                                 </button>
                                             </div>
@@ -102,9 +103,9 @@ const PostPage = () => {
                                      </div>)
                                 }
                             </div>
-                            {/* 댓글 리스트 부분 */ }
-                            {comments?.map(comment => (
-                                <div className="flex" key={comment.identifier}>
+                            {/* 댓글 리스트 부분 */}
+                            {comments && Array.isArray(comments) && comments.map(comment => (
+                                <div className="flex bg-white" key={comment.identifier}>
                                     <div className="py-2 pr-2">
                                     <p className="mb-1 text-xs leading-none">
                                         <Link href={`/u/${comment.username}`} className="mr-1 fond-bold hover:underline">
