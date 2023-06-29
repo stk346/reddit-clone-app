@@ -11,6 +11,7 @@ import axios from "axios";
 interface PostCardProps {
     post: Post
     subMutate?: () => void // subMutate는 함수이기 때문에 이렇게 작성
+    mutate?: () => void
 }
 
 const PostCard = ({
@@ -27,6 +28,7 @@ const PostCard = ({
         url,
         username,
         sub},
+        mutate,
     subMutate}: PostCardProps) => {
     const router = useRouter();
     const isInSubPage = router.pathname === '/r/[sub]' // 메인 화면이랑 sub 화면이랑 분기 처리를 위한 url 구분
@@ -38,6 +40,7 @@ const PostCard = ({
         
         try {
             await axios.post("/votes", {identifier, slug, value});
+            if (mutate) mutate();
             if (subMutate) subMutate();
         } catch (error) {
             console.log(error);
