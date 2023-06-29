@@ -52,7 +52,7 @@ const getPostComments = async (req: Request, res: Response) => {
     const {identifier, slug} = req.params;
     try {
         const post = await Post.findOneByOrFail({identifier, slug});
-        const comments = Comment.find({
+        const comments = await Comment.find({
             where: {postId: post.id},
             order: {createdAt: "DESC"},
             relations: ["votes"] // votes 테이블과 조인
